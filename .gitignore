@@ -1,0 +1,4 @@
+dist
+mysql.cache.conf
+node_modules
+yarn-error.log
