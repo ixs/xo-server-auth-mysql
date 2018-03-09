@@ -74,4 +74,5 @@ You may:
 ## License
 
 Based on [xo-server-auth-ldap](https://github.com/vatesfr/xen-orchestra/tree/master/packages/xo-server-auth-ldap)
+
 AGPL3 © Andreas Thienemann
