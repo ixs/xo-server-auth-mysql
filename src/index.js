@@ -70,6 +70,21 @@ If multiple columns are returned, the password is expected to be returned as \`p
   required: ['hostname', 'credentials', 'database', 'query', 'crypto_schema'],
 }
 
+export const testSchema = {
+  type: 'object',
+  properties: {
+    username: {
+      description: 'MySQL username',
+      type: 'string',
+    },
+    password: {
+      description: 'MySQL password',
+      type: 'string',
+    },
+  },
+  required: ['username', 'password'],
+}
+
 // ===================================================================
 
 class AuthMySQL {
