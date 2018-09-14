@@ -57,8 +57,7 @@ If multiple columns are returned, the password is expected to be returned as \`p
         'None (No encrypted password storage)',
         'DES (Traditional DES-based password hash with salt)',
       ],
-      description:
-        'Encryption scheme of stored passwords in the database',
+      description: 'Encryption scheme of stored passwords in the database',
     },
     insecureAuth: {
       description:
@@ -95,17 +94,17 @@ class AuthMySQL {
   }
 
   async configure (conf) {
-    const db_conf = {
+    const dbConf = {
       host: conf.hostname,
       user: conf.credentials.username,
       password: conf.credentials.password,
       database: conf.database,
-      insecureAuth: conf.insecureAuth
+      insecureAuth: conf.insecureAuth,
     }
 
-    this._db_conf = db_conf
-    this._db_query = conf.query
-    this._db_crypt = conf.crypto_schema
+    this._dbConf = dbConf
+    this._dbQuery = conf.query
+    this._dbQrypt = conf.crypto_schema
   }
 
   load () {
@@ -134,34 +133,37 @@ class AuthMySQL {
       return null
     }
 
-    const connection = await mysql.createConnection(this._db_conf)
+    const connection = await mysql.createConnection(this._dbConf)
     try {
-
       // Connect to DB and fetch results
-      const entries = await connection.query(this._db_query, [username])
+      const entries = await connection.query(this._dbQuery, [username])
 
       logger(`${entries.length} entries found`)
 
-      if (entries.length != 1) {
-        logger(`Expected one entry, got ${entries.length} entries. Not authenticated ${username}.`)
+      if (entries.length !== 1) {
+        logger(
+          `Expected one entry, got ${
+            entries.length
+          } entries. Not authenticated ${username}.`
+        )
 
         return null
       }
 
-      let enc_password
-      switch (this._db_crypt) {
+      let encPassword
+      switch (this._dbCrypt) {
         case 'None':
-          enc_password = password
+          encPassword = password
           break
         case 'DES':
-          enc_password = await crypt(password, entries[0].password)
+          encPassword = await crypt(password, entries[0].password)
           break
         default:
-          logger(`Unknown storage type $(this._db_crypt)`)
+          logger(`Unknown storage type $(this._dbCrypt)`)
           return null
       }
 
-      if (enc_password === entries[0].password) {
+      if (encPassword === entries[0].password) {
         logger(`Password match for ${username} => authenticated`)
         return { username }
       }
